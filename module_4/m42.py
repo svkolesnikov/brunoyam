@@ -1,6 +1,6 @@
 # Сортировка методом вставки
-def sortInsert():
-    ar = l
+def sortInsert(ar):
+
     for i in range(1, len(ar)):
         j = i
         while (j > 0) & (ar[j] < ar[j-1]):
@@ -11,5 +11,5 @@ def sortInsert():
 
 l = [8, 1, 5, 2, 6, 9, 3]
 print(l)
-sortInsert()
+sortInsert(l)
 print(l)
