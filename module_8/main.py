@@ -30,3 +30,22 @@ if __name__ == '__main__':
     db.add_link(3, 1)
     db.add_link(4, 2)
 
+    # Для отладки SQL https://sqliteonline.com/
+
+    print(f'\nStudents over 30 years old ')
+    params = {"age": {'exp': '>', 'val': 30}}
+    rows = db.select_students(params)
+    for row in rows:
+        print(row)
+
+    print(f'\nStudents are studying python')
+    params = {"course": {'exp': '=', 'val': 'python'}}
+    rows = db.select_students(params)
+    for row in rows:
+        print(row)
+
+    print(f'\nStudents are studying python from Spb')
+    params = {"course": {'exp': '=', 'val': 'python'}, "city": {'exp': '=', 'val': 'Spb'}}
+    rows = db.select_students(params)
+    for row in rows:
+        print(row)

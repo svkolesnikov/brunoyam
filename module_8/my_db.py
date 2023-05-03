@@ -85,6 +85,8 @@ class BD:
             connect = sqlite3.connect(self.db_name)
         except sqlite3.Error as error:
             logger.error(error)
+            connect.close()
+            return
 
         if connect:
             try:
@@ -106,12 +108,9 @@ class BD:
                 logger.info('Record %s added to table Courses', id)
             except sqlite3.Error as error:
                 logger.error(error)
-
+            finally:
                 if cursor:
                     cursor.close()
-                return
-
-            if connect:
                 connect.close()
                 logger.info('Disconnected to DB successful')
 
@@ -124,6 +123,8 @@ class BD:
             connect = sqlite3.connect(self.db_name)
         except sqlite3.Error as error:
             logger.error(error)
+            connect.close()
+            return
 
         if connect:
             try:
@@ -145,16 +146,13 @@ class BD:
                 logger.info('Record %s added to table Students', id)
             except sqlite3.Error as error:
                 logger.error(error)
-
+            finally:
                 if cursor:
                     cursor.close()
-                return
-
-            if connect:
                 connect.close()
                 logger.info('Disconnected to DB successful')
 
-    def add_link(self, student_id:int, course_id:int):
+    def add_link(self, student_id: int, course_id: int):
         """Adding a link"""
         connect = None
         cursor = None
@@ -163,6 +161,8 @@ class BD:
             connect = sqlite3.connect(self.db_name)
         except sqlite3.Error as error:
             logger.error(error)
+            connect.close()
+            return
 
         if connect:
             try:
@@ -176,15 +176,12 @@ class BD:
 
                 cursor.execute(query)
                 connect.commit()
-                logger.info('Record %s added to table student_courses')
+                logger.info('Record added to table student_courses')
             except sqlite3.Error as error:
                 logger.error(error)
-
+            finally:
                 if cursor:
                     cursor.close()
-                return
-
-            if connect:
                 connect.close()
                 logger.info('Disconnected to DB successful')
 
@@ -193,37 +190,42 @@ class BD:
         cursor = None
 
         s = list()
-        for key, values in params:
-            s.append(f"{key} {values['exp']} {values['val']} ")
+        for key, values in params.items():
+            if type(values['val']) is str:
+                s.append(f"{key} {values['exp']} '{values['val']}' ")
+            else:
+                s.append(f"{key} {values['exp']} {values['val']} ")
 
-        exp = s[0]
-        query = 'Select * from Students Where ' + exp
+        exp = " and ".join(s)
+        query = f"""
+        Select S.*, C.name as course, C.time_start as C_time_start, C.time_end as C_time_end  from Students as S 
+        LEFT JOIN Student_courses as SC ON S.id = SC.student_id 
+        RIGHT Join Courses as C on SC.course_id = C.id  
+        Where   {exp}
+        """
 
         try:
             connect = sqlite3.connect(self.db_name)
         except sqlite3.Error as error:
             logger.error(error)
+            connect.close()
+            return
 
         if connect:
             try:
                 cursor = connect.cursor()
                 logger.info('Connected to DB successful')
                 cursor.execute(query)
-                connect.commit()
-                logger.info('Record %s added to table student_courses')
+                rows = cursor.fetchall()
+
+                logger.info('Data obtained from the student_courses table')
             except sqlite3.Error as error:
                 logger.error(error)
-
+            finally:
                 if cursor:
                     cursor.close()
-                return
 
-            if connect:
                 connect.close()
                 logger.info('Disconnected to DB successful')
-
-
-
-
-
+            return rows
 
