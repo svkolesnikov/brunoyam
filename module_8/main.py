@@ -139,11 +139,22 @@ if __name__ == '__main__':
     add_link(3, 1)
     add_link(4, 2)
 
-    for row in Students.select().where(Students.age > 30):
-        print(f"{row.id} {row.name} {row.surname}")
+    print("**********************************************************************************************************")
+    for row in Students.select().where(Students.age > 30).dicts():
+        print(row)
 
-    for row in Students.select(Students, Courses.name.alias('course_name'))\
+    print("**********************************************************************************************************")
+    for row in Students.select(Students, Student_courses, Courses.name.alias('course_name')) \
             .join(Student_courses, on=(Students.id == Student_courses.student_id)) \
-            .join(Courses, on=(Courses.id == Student_courses.course_id), attr='name')\
-            .where(Students.age > 30):
-        print(f"{row.id} {row.name} {row.surname} ")
+            .join(Courses, JOIN.RIGHT_OUTER, on=(Courses.id == Student_courses.course_id)) \
+            .where(Courses.name == 'python') \
+            .dicts():
+        print(row)
+
+    print("**********************************************************************************************************")
+    for row in Students.select(Students, Student_courses, Courses.name.alias('course_name')) \
+            .join(Student_courses, on=(Students.id == Student_courses.student_id)) \
+            .join(Courses, JOIN.RIGHT_OUTER, on=(Courses.id == Student_courses.course_id)) \
+            .where(Courses.name == 'python', Students.city == 'Spb') \
+            .dicts():
+        print(row)
