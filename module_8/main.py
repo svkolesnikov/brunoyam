@@ -15,33 +15,56 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def add_student(id, name, surname, age, city):
-    row = Students(
-        id=id,
-        name=name,
-        surname=surname,
-        age=age,
-        city=city
-    )
-    row.save()
+def add_student(name: str, surname: str, age: int, city: str, id=None):
+    if id:
+        try:
+            Students.insert(
+                id=id,
+                name=name,
+                surname=surname,
+                age=age,
+                city=city
+            ).execute()
+        except:
+            print("Запись существует")
+    else:
+        raw = Students(
+            name=name,
+            surname=surname,
+            age=age,
+            city=city
+        )
+        raw.save()
 
 
-def add_cource(id, name, time_start, time_end):
-    row = Courses(
-        id=id,
-        name=name,
-        time_start=time_start,
-        time_end=time_end
-    )
-    row.save()
+def add_cource(name, time_start, time_end, id=None):
+    if id:
+        try:
+            Courses.insert(
+                id=id,
+                name=name,
+                time_start=time_start,
+                time_end=time_end).execute()
+        except:
+            print("Запись существует")
+
+    else:
+        row = Courses(
+            name=name,
+            time_start=time_start,
+            time_end=time_end
+        )
+        row.save()
 
 
 def add_link(student_id, course_id):
-    row = Student_courses(
-        student_id=student_id,
-        course_id=course_id
-    )
-    row.save()
+    if not Student_courses.select().where(Student_courses.student_id == student_id,
+                                          Student_courses.course_id == course_id):
+        row = Student_courses(
+            student_id=student_id,
+            course_id=course_id
+        )
+        print(row.save())
 
 
 if __name__ == '__main__':
@@ -94,6 +117,7 @@ if __name__ == '__main__':
 
     try:
         Courses.create_table()
+
     except peewee.InternalError as px:
         print(str(px))
 
@@ -102,21 +126,24 @@ if __name__ == '__main__':
     except peewee.InternalError as px:
         print(str(px))
 
-    add_student(1, 'Max', 'Brooks', 24, 'Spb')
-    add_student(2, 'John', 'Stones', 15, 'Spb')
-    add_student(3, 'Andy', 'Wings', 45, 'Manhester')
-    add_student(4, 'Kate', 'Brooks', 34, 'Spb')
+    add_student('Max', 'Brooks', 24, 'Spb', 1)
+    add_student('John', 'Stones', 15, 'Spb', 2)
+    add_student('Andy', 'Wings', 45, 'Manhester', 3)
+    add_student('Kate', 'Brooks', 34, 'Spb', 4)
 
-    add_cource(1, 'python', datetime.datetime(2021, 7, 21), datetime.datetime(2021, 8, 21))
-    add_cource(2, 'java', datetime.datetime(2021, 7, 13), datetime.datetime(2021, 8, 16))
+    add_cource('python', datetime.datetime(2021, 7, 21), datetime.datetime(2021, 8, 21), 1)
+    add_cource('java', datetime.datetime(2021, 7, 13), datetime.datetime(2021, 8, 16), 2)
 
     add_link(1, 1)
     add_link(2, 1)
     add_link(3, 1)
     add_link(4, 2)
 
+    for row in Students.select().where(Students.age > 30):
+        print(f"{row.id} {row.name} {row.surname}")
 
-    print("!!!")
-
-    for row in Students.select().where(Students.age < 30):
-        print(">")
+    for row in Students.select(Students, Courses.name.alias('course_name'))\
+            .join(Student_courses, on=(Students.id == Student_courses.student_id)) \
+            .join(Courses, on=(Courses.id == Student_courses.course_id), attr='name')\
+            .where(Students.age > 30):
+        print(f"{row.id} {row.name} {row.surname} ")

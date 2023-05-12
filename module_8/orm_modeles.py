@@ -11,11 +11,11 @@ class BaseModel(Model):
 
 
 class Students(BaseModel):
-    id = PrimaryKeyField(null=False)
-    name = CharField(max_length=100)
-    surname = CharField(max_length=100)
-    age = IntegerField()
-    city = CharField(max_length=100)
+    id = IntegerField(null=False, primary_key=True)
+    name = CharField(max_length=100, default='')
+    surname = CharField(max_length=100, default='')
+    age = IntegerField(default=0)
+    city = CharField(max_length=100, default='')
 
     class Meta:
         db_table = 'students'
@@ -23,7 +23,7 @@ class Students(BaseModel):
 
 
 class Courses(BaseModel):
-    id = PrimaryKeyField(null=False)
+    id = IntegerField(null=False, primary_key=True)
     name = CharField(max_length=100, null=False)
     time_start = DateField(null=False)
     time_end = DateField(null=False)
