@@ -1,6 +1,8 @@
 import logging
 import sys
 import datetime
+from orm_modeles import *
+import peewee
 
 from my_db import BD
 
@@ -49,3 +51,20 @@ if __name__ == '__main__':
     rows = db.select_students(params)
     for row in rows:
         print(row)
+
+    # peewee
+    try:
+        db.connect()
+        Students.create_table()
+    except peewee.InternalError as px:
+        print(str(px))
+
+    try:
+        Courses.create_table()
+    except peewee.InternalError as px:
+        print(str(px))
+
+    try:
+        Student_courses.create_table()
+    except peewee.InternalError as px:
+        print(str(px))

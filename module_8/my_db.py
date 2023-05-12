@@ -1,7 +1,6 @@
 import logging
 import sqlite3
 import datetime
-from sqlite3 import Cursor
 
 logger = logging.getLogger(__name__)
 
