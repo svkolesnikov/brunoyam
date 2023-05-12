@@ -2,12 +2,12 @@
 # https://docs.peewee-orm.com/en/latest/peewee/database.html
 from peewee import *
 
-db = SqliteDatabase('test.db')
+db2 = SqliteDatabase('test2.db')
 
 
 class BaseModel(Model):
     class Meta:
-        database = db
+        database = db2
 
 
 class Students(BaseModel):

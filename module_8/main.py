@@ -1,8 +1,8 @@
 import logging
 import sys
 import datetime
-from orm_modeles import *
 import peewee
+from orm_modeles import *
 
 from my_db import BD
 
@@ -13,6 +13,36 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
+
+
+def add_student(id, name, surname, age, city):
+    row = Students(
+        id=id,
+        name=name,
+        surname=surname,
+        age=age,
+        city=city
+    )
+    row.save()
+
+
+def add_cource(id, name, time_start, time_end):
+    row = Courses(
+        id=id,
+        name=name,
+        time_start=time_start,
+        time_end=time_end
+    )
+    row.save()
+
+
+def add_link(student_id, course_id):
+    row = Student_courses(
+        student_id=student_id,
+        course_id=course_id
+    )
+    row.save()
+
 
 if __name__ == '__main__':
     db = BD("test.db")
@@ -52,9 +82,12 @@ if __name__ == '__main__':
     for row in rows:
         print(row)
 
-    # peewee
+    print("===================================================================================================")
+    print("                                              peewee                                               ")
+    print("===================================================================================================")
+
     try:
-        db.connect()
+        db2.connect()
         Students.create_table()
     except peewee.InternalError as px:
         print(str(px))
@@ -68,3 +101,22 @@ if __name__ == '__main__':
         Student_courses.create_table()
     except peewee.InternalError as px:
         print(str(px))
+
+    add_student(1, 'Max', 'Brooks', 24, 'Spb')
+    add_student(2, 'John', 'Stones', 15, 'Spb')
+    add_student(3, 'Andy', 'Wings', 45, 'Manhester')
+    add_student(4, 'Kate', 'Brooks', 34, 'Spb')
+
+    add_cource(1, 'python', datetime.datetime(2021, 7, 21), datetime.datetime(2021, 8, 21))
+    add_cource(2, 'java', datetime.datetime(2021, 7, 13), datetime.datetime(2021, 8, 16))
+
+    add_link(1, 1)
+    add_link(2, 1)
+    add_link(3, 1)
+    add_link(4, 2)
+
+
+    print("!!!")
+
+    for row in Students.select().where(Students.age < 30):
+        print(">")
