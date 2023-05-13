@@ -52,7 +52,7 @@ def add_link(student_id, course_id):
             student_id=student_id,
             course_id=course_id
         )
-        print(row.save())
+        row.save()
 
 
 if __name__ == '__main__':
