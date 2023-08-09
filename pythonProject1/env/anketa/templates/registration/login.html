@@ -1,23 +1,22 @@
-{% extends "base_generic.html" %}
+{% extends "base.html" %}
 
 {% block title %}
-<title>{{title}}</title>
+<title>Вход</title>
 {% endblock %}
 
 {% block content %}
 
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+<p>Ваше имя пользователя или пароль - неверны. Попробуйте еще раз.</p>
 {% endif %}
 
-{% if next %}
+
 {% if user.is_authenticated %}
-<p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
+<p>Вы уже выполнили вход</p>
 {% else %}
-<p>Please login to see this page.</p>
+<p>Пожалуйста, авторизуйтесь</p>
 {% endif %}
-{% endif %}
+
 
 <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
@@ -34,11 +33,11 @@
         </tr>
     </table>
 
-    <input type="submit" value="login"/>
+    <input type="submit" value="Войти"/>
     <input type="hidden" name="next" value="{{ next }}"/>
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+<p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
 
 {% endblock %}
