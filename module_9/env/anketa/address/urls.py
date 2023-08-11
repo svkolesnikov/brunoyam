@@ -1,5 +1,8 @@
 from django.urls import path, include
 from . import views
+
+
+
 urlpatterns = [
-    #path('index', views.index, name="Index"),
+  #  path('', views.index, name="Список адресов"),
 ]

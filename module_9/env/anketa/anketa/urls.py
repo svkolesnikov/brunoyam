@@ -22,6 +22,8 @@ from django.urls import path, include
 urlpatterns = [
     #path('', views.index, name="Index"),
     path('admin/', admin.site.urls),
+    path('campaign/', include('campaign.urls')),
+    path('address/', include('address.urls')),
     path('', include('main.urls'))
     #path('campaing/', include('campaing.urls'))
 ]
