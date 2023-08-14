@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+
+{% block title %}
+<title>Удаление адреса</title>
+{% endblock %}
+
+{% block content %}
+<h2>Удалить адрес</h2>
+<p>Уверен что хотите удалить адрес {{form.pk}}</p>
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_button 'Удалить' %}
+</form>
+{% endblock%}

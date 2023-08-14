@@ -16,14 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
     #path('', views.index, name="Index"),
     path('admin/', admin.site.urls),
     path('campaign/', include('campaign.urls')),
-    path('address/', include('address.urls')),
+    path('address/', include('campaign.urls_adr')),
     path('', include('main.urls'))
     #path('campaing/', include('campaing.urls'))
-]
+]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

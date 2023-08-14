@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block title %}
+<title>Все адреса обхода</title>
+{% endblock %}
+
+{% block content %}
+<h2>Все адреса обхода</h2>
+ <div class="button">
+    <a class="button__text" href="{%url 'address_add' %}">Добавить адрес</a>
+</div>
+
+{% if items%}
+
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Город</th>
+            <th>Улица</th>
+            <th>дом</th>
+            <th>кол-во подъездов</th>
+            <th>кол-во квартир</th>
+            <th> </th>
+            <th> </th>
+        </tr>
+    {% for item in items%}
+        <tr>
+            <td>{{item.id}}</td>
+            <td>{{item.city}}</td>
+            <td>{{item.street}}</td>
+            <td>{{item.home}}</td>
+            <td>{{item.cnt_entrances}}</td>
+            <td>{{item.cnt_rooms}}</td>
+            <td><a href="{% url 'address_edit' pk=item.pk%}">[edit]</a></td>
+            <td><a href="{% url 'address_del' pk=item.pk%}">[del]</a></td>
+        </tr>
+    {% endfor%}
+    </table>
+{% endif%}
+{% endblock%}

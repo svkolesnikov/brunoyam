@@ -9,11 +9,31 @@
 
 {% block content %}
 <h2>Мои Кампании</h2>
+
 {% if items%}
-    <ul>
+    <div class="button">
+        <a class="button__text" href="{%url 'campaign_add' %}">Добавить кампанию</a>
+    </div>
+
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Наименование</th>
+            <th> </th>
+            <th> </th>
+        </tr>
     {% for item in items%}
-        <li><a href="">{{item.id}}-{{item.name}}</a></li>
+        <tr>
+            <td>{{item.id}}</td>
+            <td><a href="{% url 'campaign_view' pk=item.pk%}">{{item.name}}</a></td>
+            <td><a href="{% url 'campaign_edit' pk=item.pk%}">[edit]</a></td>
+            <td><a href="{% url 'campaign_del' pk=item.pk%}">[del]</a></td>
+        </tr>
     {% endfor%}
-    </ul>
+    </table>
 {% endif%}
+
+
+
 {% endblock%}
+

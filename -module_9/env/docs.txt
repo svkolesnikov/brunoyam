@@ -1,0 +1,5 @@
+https://docs.djangoproject.com/en/4.2/topics/auth/default/
+https://developer.mozilla.org/ru/docs/Learn/Server-side/Django/Authentication
+
+Расширение модели пользователя в Django: сравнение нескольких стратегий с примерами кода
+https://tproger.ru/translations/extending-django-user-model/#var2

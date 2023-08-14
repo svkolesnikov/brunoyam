@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+
+{% block title %}
+<title>Добавление новой кампании</title>
+{% endblock %}
+
+{% block content %}
+<h2>Добавление кампании</h2>
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% bootstrap_button 'Добавить' %}
+</form>
+{% endblock%}

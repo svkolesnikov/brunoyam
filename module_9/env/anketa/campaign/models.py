@@ -5,6 +5,7 @@ from main.models import AdvUser
 
 
 
+
 # Create your models here.
 class DBCampaign(models.Model):
     name = models.CharField(max_length=50, null=False, default='', verbose_name='Название кампании')
@@ -13,6 +14,7 @@ class DBCampaign(models.Model):
     class Meta:
         verbose_name_plural = 'Кампании'
         verbose_name = 'Кампания'
+
 
 class DBAddress(models.Model):
     city = models.CharField(max_length=50, verbose_name='Город')
@@ -27,10 +29,9 @@ class DBAddress(models.Model):
         ordering = ['city']
 
 
-
 class DBCampaign_address(models.Model):
-    campaign_id: models.ForeignKey(DBCampaign, null=True, on_delete=models.PROTECT, verbose_name='ID Кампании')
-    address_id: models.ForeignKey(DBAddress, null=True, on_delete=models.PROTECT, verbose_name='ID дома')
+    campaign_id= models.ForeignKey(DBCampaign, null=True, on_delete=models.PROTECT, verbose_name='ID Кампании')
+    address_id = models.ForeignKey(DBAddress, null=True, on_delete=models.PROTECT, verbose_name='ID дома')
 
     class Meta:
         verbose_name_plural = 'Связь Кампании с адресом дома'

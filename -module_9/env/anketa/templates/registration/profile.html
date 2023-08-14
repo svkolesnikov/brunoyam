@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Профиль пользователя</title>
+{% endblock %}
+
+{% block content %}
+
+<h2>Профиль пользователя {{user.last_name}}</h2>
+
+<div class="profile-block">
+  <div class="profile-block__label">Имя:</div>
+  <div class="profile-block__value">{{user.first_name}}</div>
+</div>
+
+<div class="profile-block">
+  <div class="profile-block__label">Фамилия:</div>
+  <div class="profile-block__value">{{user.last_name}}</div>
+</div>
+
+<div class="profile-block">
+  <div class="profile-block__label">E-mail:</div>
+  <div class="profile-block__value">{{user.email}}</div>
+</div>
+
+<div class="profile-block">
+  <div class="profile-block__label">Телефон:</div>
+  <div class="profile-block__value">{{user.phone}}</div>
+</div>
+
+{% endblock %}
+
