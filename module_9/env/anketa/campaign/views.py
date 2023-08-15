@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
-from .models import DBCampaign, DBAddress, DBCampaign_address
+from .models import DBCampaign, DBAddress, DBCampaign_address, AdvUser
 from .forms import CampaignForm, AddressForm
 
 
@@ -58,7 +58,7 @@ def campaign_del(request, pk):
 
     if request.method == 'POST':
         fm.delete()
-        messages.add_message(request, messages.SUCCESS, 'Объявление удалено')
+        messages.add_message(request, messages.SUCCESS, 'Кампания удалена')
         return redirect('campaign')
     else:
         context = {'form': fm}
@@ -72,15 +72,17 @@ def campaign_view(request, pk):
     context = {'pk': pk, 'items': items}
     return render(request, 'private/campaign_view.html', context)
 
-
+@login_required
 def campaign_address_select(request, pk):
-    items = DBCampaign_address.objects.select_related('address_id').exclude(campaign_id=pk)
+    items = DBAddress.objects.exclude(dbcampaign_address__campaign_id=pk)
     context = {'pk': pk, 'items': items}
     return render(request, 'private/campaign_address_select.html', context)
 
 
+@login_required
 def campaign_address_add(request, pk, id):
     flg = DBCampaign_address.objects.filter(campaign_id=pk).filter(address_id=id)
+
     if len(flg) == 0:
         try:
             rec = DBCampaign_address()
@@ -90,10 +92,50 @@ def campaign_address_add(request, pk, id):
         except:
             return HttpResponseNotFound("<h2>Неверно заданы параметры запроса</h2>")
 
-    items = DBCampaign_address.objects.select_related('address_id').exclude(campaign_id=pk)
-
+    items = DBAddress.objects.exclude(dbcampaign_address__campaign_id=pk)
     context = {'pk': pk, 'items': items}
     return render(request, 'private/campaign_address_select.html', context)
+
+@login_required
+def campaign_address_delete(request, pk, id):
+    try:
+        DBCampaign_address.objects.filter(campaign_id=pk).filter(address_id=id).delete()
+        return redirect('campaign_view', pk)
+    except:
+        return HttpResponseNotFound("<h2>Неверно заданы параметры запроса</h2>")
+
+
+@login_required
+def campaign_user_select(request, pk):
+    items = AdvUser.objects.exclude(dbcampaign_user__campaign_id=pk)
+    context = {'pk': pk, 'items': items}
+    return render(request, 'private/campaign_user_select.html', context)
+
+@login_required
+def campaign_user_add(request, pk, id):
+    flg = DBCampaign_user.objects.filter(campaign_id=pk).filter(user_id=id)
+
+    if len(flg) == 0:
+        try:
+            rec = DBCampaign_user()
+            rec.campaign_id = get_object_or_404(DBCampaign, pk=pk)
+            rec.user_id = get_object_or_404(AdvUser, pk=id)
+            rec.save()
+        except:
+            return HttpResponseNotFound("<h2>Неверно заданы параметры запроса</h2>")
+
+    items = AdvUser.objects.exclude(dbcampaign_user__campaign_id=pk)
+    context = {'pk': pk, 'items': items}
+    return render(request, 'private/campaign_user_select.html', context)
+
+
+@login_required
+def campaign_user_delete(request, pk, id):
+    try:
+        DBCampaign_user.objects.filter(campaign_id=pk).filter(user_id=id).delete()
+        return redirect('campaign_view', pk)
+    except:
+        return HttpResponseNotFound("<h2>Неверно заданы параметры запроса</h2>")
 
 
 @login_required
