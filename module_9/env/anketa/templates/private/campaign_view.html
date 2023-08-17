@@ -20,9 +20,14 @@
                 <a class="button__text" href="{%url 'campaign_user_select' pk=pk %}">Добавить пользователя опроса</a>
             </div>
         </div>
+        <div class="toolbar__item">
+            <div class="button">
+                <a class="button__text" href="{%url 'campaign_stat' pk=pk %}">Статистика</a>
+            </div>
+        </div>
     </div>
 
-{% if items%}
+{% if items_cmp%}
 
     <table>
         <tr>
@@ -34,8 +39,9 @@
             <th>кол-во квартир</th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
-    {% for item in items %}
+    {% for item in items_cmp %}
         <tr>
             <td>{{item.address_id.pk}}</td>
             <td><a href="">{{item.address_id.city}}</a></td>
@@ -43,8 +49,33 @@
             <td><a href="">{{item.address_id.home}}</a></td>
             <td><a href="">{{item.address_id.cnt_entrances}}</a></td>
             <td><a href="">{{item.address_id.cnt_rooms}}</a></td>
-            <td><a href="{ url 'survey_list' pk=item.pk}">[survey]</a></td>
+            <td><a href="{% url 'survey_add' pk=pk id=item.address_id.pk%}">[опрос]</a></td>
+            <td><a href="{% url 'address_state' pk=pk id=item.address_id.pk %}">[стат]</a></td>
             <td><a href="{% url 'campaign_address_del' pk=pk id=item.address_id.pk %}">[del]</a></td>
+        </tr>
+    {% endfor%}
+    </table>
+{% endif%}
+
+<h3>Список пользователей</h3>
+{% if items_user%}
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Логин</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
+
+            <th></th>
+        </tr>
+    {% for item in items_user%}
+        <tr>
+            <td>{{item.user_id.id}}</td>
+            <td>{{item.user_id.username}}</td>
+            <td>{{item.user_id.first_name}}</td>
+            <td>{{item.user_id.last_name}}</td>
+
+            <td><a href="{% url 'campaign_user_del' pk=pk id=item.user_id.pk %}">[del]</a></td>
         </tr>
     {% endfor%}
     </table>

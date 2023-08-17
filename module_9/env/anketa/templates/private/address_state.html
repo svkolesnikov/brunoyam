@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block title %}
+<title>Статистика обхода дома</title>
+{% endblock %}
+
+{% block content %}
+<h2>Список обхода дома</h2>
+    <div class="button">
+        <a class="button__text" href="{%url 'campaign_view' pk=pk %}">Назад</a>
+    </div>
+{% if items%}
+    <table border="1">
+        <tr>
+            <th>#</th>
+            <th>Кампания</th>
+            <th>адрес</th>
+            <th>Дата</th>
+            <th>Квартира</th>
+            <th>Дверь открыли</th>
+            <th>ФИО</th>
+            <th>Телефон</th>
+            <th>Реакция</th>
+            <th>примечание</th>
+        </tr>
+    {% for item in items %}
+        <tr>
+            <td>{{item.pk}}</td>
+            <td>{{item.campaign_id.name}}</td>
+            <td>{{item.address_id.pk}}</td>
+            <td>{{item.published}}</td>
+            <td>{{item.room}}</td>
+            <td>{{item.open_door}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.phone}}</td>
+            <td>{{item.state.name}}</td>
+            <td>{{item.note}}</td>
+        </tr>
+    {% endfor%}
+    </table>
+{% endif%}
+
+
+
+{% endblock%}

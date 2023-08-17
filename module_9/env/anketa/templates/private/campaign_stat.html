@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block title %}
+<title>Статистика обхода по кампании</title>
+{% endblock %}
+
+{% block content %}
+<h2>Список обхода по кампании</h2>
+    <div class="button">
+        <a class="button__text" href="{%url 'campaign_view' pk=pk %}">Назад</a>
+    </div>
+<h3>Статистика по открытым дверям</h3>
+    <div class="block-stat">
+        <div class="block-stat__item">
+            <div class="block-stat__label">Всего дверей</div>
+            <div class="block-stat__value">{{doors}}</div>
+        </div>
+        <div class="block-stat__item">
+            <div class="block-stat__label">Открыто, %</div>
+            <div class="block-stat__value">{{pc_doors_open}}</div>
+        </div>
+        <div class="block-stat__item">
+            <div class="block-stat__label">Не открыто, %</div>
+            <div class="block-stat__value">{{pc_doors_close}}</div>
+        </div>
+    </div>
+{% if items%}
+    <table border="1">
+        <tr>
+            <th>Город</th>
+            <th>Улица</th>
+            <th>Дом</th>
+            <th>Дверь открыли</th>
+            <th>Дверь не открыли</th>
+        </tr>
+    {% for item in items %}
+        <tr>
+            <td>{{item.address_id__city}}</td>
+            <td>{{item.address_id__street}}</td>
+            <td>{{item.address_id__home}}</td>
+            <td>{{item.do}}</td>
+            <td>{{item.dc}}</td>
+        </tr>
+    {% endfor%}
+    </table>
+{% endif%}
+
+<h3>Статистика по реакции</h3>
+{% if items_state%}
+    <table border="1">
+        <tr>
+            <th>Город</th>
+            <th>Улица</th>
+            <th>Дом</th>
+            <th>Положительно</th>
+            <th>Негативно</th>
+        </tr>
+    {% for item in items_state %}
+        <tr>
+            <td>{{item.address_id__city}}</td>
+            <td>{{item.address_id__street}}</td>
+            <td>{{item.address_id__home}}</td>
+            <td>{{item.positive}}</td>
+            <td>{{item.negative}}</td>
+        </tr>
+    {% endfor%}
+    </table>
+{% endif%}
+
+<h3>Количество контактов: {{cnt_contact}}</h3>
+
+{% endblock%}

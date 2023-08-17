@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import DBCampaign, DBAddress
+from .models import DBCampaign, DBAddress, DBAnketa
 
 class CampaignForm(forms.ModelForm):
     class Meta:
@@ -14,6 +14,9 @@ class AddressForm(forms.ModelForm):
         model = DBAddress
         fields = '__all__'
 
-
-
+class SurveyForm(forms.ModelForm):
+    class Meta:
+        model = DBAnketa
+        fields= '__all__'
+        #widgets = {'user_id': forms.HiddenInput, 'campaign_id':forms.HiddenInput, 'address_id':forms.HiddenInput}
 
